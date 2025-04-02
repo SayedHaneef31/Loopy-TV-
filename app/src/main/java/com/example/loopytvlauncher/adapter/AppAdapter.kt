@@ -22,6 +22,8 @@ class AppAdapter(
 
     override fun onBindViewHolder(holder: AppViewHolder, position: Int) {
         val app = apps[position]
+        holder.itemView.isFocusable = true
+        holder.itemView.isFocusableInTouchMode = true
         holder.bind(app)
         holder.itemView.setOnClickListener { onAppClick(app) }
     }

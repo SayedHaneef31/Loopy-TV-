@@ -5,15 +5,18 @@
     android:layout_height="180dp"
     xmlns:aandroid="http://schemas.android.com/tools"
     android:layout_margin="16dp"
-    aandroid:background="@drawable/app_item_background"
+
+
     android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    android:foreground="@drawable/focus_highlight">
 
     <ImageView
         android:id="@+id/app_icon"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="16dp"
+        android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
