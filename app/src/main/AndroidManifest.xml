@@ -36,6 +36,9 @@
             android:exported="true"
             android:label="Loopy TV"
             android:launchMode="singleTask"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"
+            android:stateNotNeeded="true"
             android:theme="@style/Theme.Leanback">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
