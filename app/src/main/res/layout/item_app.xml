@@ -26,11 +26,17 @@
         android:gravity="center"
         android:maxLines="2"
         android:padding="8dp"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:shadowColor="#A0000000"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/app_icon" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

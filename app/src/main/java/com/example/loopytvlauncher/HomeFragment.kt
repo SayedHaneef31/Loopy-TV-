@@ -1,8 +1,12 @@
 package com.example.loopytvlauncher
 
+import android.content.Context
 import android.content.Intent
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +32,7 @@ class HomeFragment : Fragment() {
 
         appsGrid = view.findViewById(R.id.apps_grid)
 
+        printInstalledApps(requireContext())
         // Load approved apps
         loadApprovedApps()
 
@@ -38,15 +43,30 @@ class HomeFragment : Fragment() {
 
         // Configure the grid
         appsGrid.adapter = adapter
-        appsGrid.setNumColumns(4)  // Show 4 apps per row
-        // We'll set up the grid adapter in the next step
+        appsGrid.setNumColumns(3)  // Show 4 apps per row
     }
+    fun printInstalledApps(context: Context) {
+        val pm = context.packageManager
+        val installedApps = pm.getInstalledApplications(PackageManager.GET_META_DATA)
 
-    private fun launchApp(packageName: String) {
-        val launchIntent = requireActivity().packageManager.getLaunchIntentForPackage(packageName)
-        if (launchIntent != null) {
-            startActivity(launchIntent)
+        val systemApps = mutableListOf<String>()
+        val thirdPartyApps = mutableListOf<String>()
+
+        for (app in installedApps) {
+            val isSystemApp = (app.flags and ApplicationInfo.FLAG_SYSTEM) != 0
+
+            if (isSystemApp) {
+                systemApps.add(app.packageName)
+            } else {
+                thirdPartyApps.add(app.packageName)
+            }
         }
+
+        // Print System Apps
+        Log.d("SystemApps", "System Apps: ${systemApps.joinToString("\n")}")
+
+        // Print Third-Party Apps
+        Log.d("ThirdPartyApps", "Third-Party Apps: ${thirdPartyApps.joinToString("\n")}")
     }
 
     private fun loadApprovedApps() {
@@ -61,16 +81,17 @@ class HomeFragment : Fragment() {
 
         // List of approved package names for kids
         val approvedPackages = listOf(
-            "com.netflix.ninja",         // Netflix
-            "com.disney.disneyplus",     // Disney+
+            "com.google.android.youtube.tvkids",         // Youtube kids
+            "com.learn_english_today",     // English learn+
             "com.google.android.youtube.tv", // YouTube
             "com.android.vending",       // Play Store (just for testing)
-            // Add more approved apps as needed
+
         )
 
         // Filter apps based on approved packages
         for (info in allApps) {
             val packageName = info.activityInfo.packageName
+            Log.d("HaneefDebug", "Found app: $packageName")
 
             // Check if this app is approved
             if (packageName in approvedPackages) {
@@ -81,6 +102,13 @@ class HomeFragment : Fragment() {
                 )
                 appsList.add(appInfo)
             }
+        }
+    }
+
+    private fun launchApp(packageName: String) {
+        val launchIntent = requireActivity().packageManager.getLaunchIntentForPackage(packageName)
+        if (launchIntent != null) {
+            startActivity(launchIntent)
         }
     }
 }
