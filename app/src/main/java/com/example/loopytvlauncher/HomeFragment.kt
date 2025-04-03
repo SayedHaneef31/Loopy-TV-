@@ -86,7 +86,7 @@ class HomeFragment : Fragment() {
         // List of approved package names for kids
         val approvedPackages = listOf(
             "com.google.android.youtube.tvkids",         // Youtube kids
-            "com.learn_english_today",     // English learn+
+
             "com.google.android.youtube.tv", // YouTube
             "com.android.vending",       // Play Store (just for testing)
 

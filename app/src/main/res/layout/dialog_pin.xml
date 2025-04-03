@@ -4,35 +4,49 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="24dp"
-    android:background="@drawable/dialog_background">
+    android:background="@drawable/dialog_background"
+    android:gravity="center">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@mipmap/ic_launcher"
+        android:layout_marginBottom="16dp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/akaya_kanadaka"
+        android:gravity="center"
         android:text="Enter PIN to Exit"
-        android:textSize="18sp"
-        android:textColor="#000"
-        android:textStyle="bold"
-        android:gravity="center"/>
+        android:textColor="#FF4081"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/pin_input"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:inputType="numberPassword"
-        android:textColor="#000"
+        android:textColor="#673AB7"
         android:digits="0123456789"
         android:maxLength="4"
         android:gravity="center"
-        android:textSize="24sp"
-        android:layout_marginTop="12dp"/>
+        android:textSize="32sp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/pin_input_background"
+        android:padding="16dp"/>
 
     <Button
         android:id="@+id/btn_submit"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="Submit"
         android:textAllCaps="false"
-        android:layout_marginTop="12dp"/>
+        android:textSize="20sp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_background"
+        android:textColor="#FFFFFF"
+        android:fontFamily="casual"/>
 
 </LinearLayout>

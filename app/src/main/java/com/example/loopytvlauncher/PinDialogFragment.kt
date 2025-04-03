@@ -2,6 +2,7 @@ package com.example.loopytvlauncher
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.KeyEvent
@@ -11,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import android.view.inputmethod.EditorInfo
 
 class PinDialogFragment(private val onCorrectPin: () -> Unit) : DialogFragment() {
 
@@ -47,16 +49,43 @@ class PinDialogFragment(private val onCorrectPin: () -> Unit) : DialogFragment()
         }
 
         submitButton.setOnClickListener {
-            if (pinEditText.text.toString() == "1234") { // Replace with your desired PIN
+            val enteredPin = pinEditText.text.toString()
+            if (enteredPin == "1234") { // Replace with your desired PIN
                 onCorrectPin()
                 dismiss()
             } else {
-                Toast.makeText(requireContext(), "Incorrect PIN!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Incorrect PIN! Please try again.", Toast.LENGTH_SHORT).show()
                 pinEditText.text.clear()
                 pinEditText.requestFocus()
             }
         }
 
+        // Also handle Enter key press
+        pinEditText.setOnEditorActionListener { _, actionId, event ->
+            if (event?.keyCode == KeyEvent.KEYCODE_ENTER || actionId == EditorInfo.IME_ACTION_DONE) {
+                submitButton.performClick()
+                true
+            } else {
+                false
+            }
+        }
+
         return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+    }
+    
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        // Reset the flag when the dialog is dismissed
+        if (activity is KidsLauncherActivity) {
+            (activity as KidsLauncherActivity).resetPinDialogShowing()
+        }
     }
 }
