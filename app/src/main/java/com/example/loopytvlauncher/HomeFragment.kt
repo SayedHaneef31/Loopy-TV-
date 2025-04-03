@@ -2,6 +2,7 @@ package com.example.loopytvlauncher
 
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
@@ -11,6 +12,7 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.registerReceiver
 import androidx.fragment.app.Fragment
 import androidx.leanback.widget.VerticalGridView
 import com.example.loopytvlauncher.adapter.AppAdapter
@@ -26,22 +28,8 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
-
-        view.isFocusableInTouchMode = true
-        view.requestFocus()
-        view.setOnKeyListener { _, keyCode, event ->
-            if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_DOWN) {
-                showPinDialog()
-                true
-            } else {
-                false
-            }
-        }
-
         return view
     }
-
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -122,18 +110,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun launchApp(packageName: String) {
+        // Set the flag to indicate we're launching an app
+        (requireActivity() as KidsLauncherActivity).setAppLaunching(true)
+        
         val launchIntent = requireActivity().packageManager.getLaunchIntentForPackage(packageName)
         if (launchIntent != null) {
             startActivity(launchIntent)
         }
     }
-
-    private fun showPinDialog() {
-        PinDialogFragment {
-            requireActivity().finish()
-        }.show(childFragmentManager, "PinDialog")
-    }
-
-
-
 }

@@ -7,6 +7,9 @@ import android.view.KeyEvent
 import androidx.fragment.app.FragmentActivity
 
 class KidsLauncherActivity : FragmentActivity() {
+    private var isLauncherActive = false
+    private var isAppLaunching = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_kids_launcher)
@@ -18,22 +21,62 @@ class KidsLauncherActivity : FragmentActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        isLauncherActive = true
+        isAppLaunching = false
+    }
+
+    override fun onPause() {
+        super.onPause()
+        isLauncherActive = false
+    }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_HOME) {
-            showPinDialog() // Show PIN dialog on home button press
-            return true; // Prevent default home button behavior
+        // If we're launching an app, don't show PIN dialog
+        if (isAppLaunching) {
+            return super.onKeyDown(keyCode, event)
+        }
+
+        // If we're not in the launcher, let the current app handle the key
+        if (!isLauncherActive) {
+            return super.onKeyDown(keyCode, event)
+        }
+
+        when (keyCode) {
+            KeyEvent.KEYCODE_BACK -> {
+                showPinDialog()
+                return true
+            }
+            KeyEvent.KEYCODE_HOME -> {
+                showPinDialog()
+                return true
+            }
         }
         return super.onKeyDown(keyCode, event)
     }
 
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
-        showPinDialog() // Ensure PIN dialog appears immediately
+        // Only show PIN dialog if we're in the launcher and not launching an app
+        if (isLauncherActive && !isAppLaunching) {
+            showPinDialog()
+        }
     }
 
-    public fun showPinDialog() {
+    // Method to be called when launching an app
+    fun setAppLaunching(launching: Boolean) {
+        isAppLaunching = launching
+    }
+
+    private fun showPinDialog() {
         PinDialogFragment {
-            // Prevent exiting without PIN
+            // Launch Android home screen
+            val homeIntent = Intent(Intent.ACTION_MAIN)
+            homeIntent.addCategory(Intent.CATEGORY_HOME)
+            homeIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(homeIntent)
+            finish()
         }.show(supportFragmentManager, "PinDialog")
     }
 }
